@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Astral Ochoa — Digital Transformation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:    #FAF7F2;
+      --pink:     #E8A4B0;
+      --pink-lt:  #F5D5DC;
+      --purple:   #C4B0D8;
+      --purple-lt:#EDE9F6;
+      --peach:    #E8C4A0;
+      --peach-lt: #FAF0E6;
+      --slate:    #2A2D3A;
+      --slate-mid:#5A6070;
+      --slate-lt: #9AA0B0;
+      --white:    #FFFFFF;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--slate);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── Floating blobs ── */
+    .bg-blobs {
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none; overflow: hidden;
+    }
+    .blob {
+      position: absolute; border-radius: 50%;
+      filter: blur(100px); opacity: 0.35;
+    }
+    .blob-1 { width: 560px; height: 560px; background: var(--pink); top: -140px; left: -140px; animation: float1 14s ease-in-out infinite; }
+    .blob-2 { width: 640px; height: 640px; background: var(--purple); top: 45%; right: -200px; animation: float2 18s ease-in-out infinite; }
+    .blob-3 { width: 440px; height: 440px; background: var(--peach); bottom: 5%; left: 20%; animation: float1 12s ease-in-out infinite reverse; }
+
+    @keyframes float1 {
+      0%,100% { transform: translate(0,0) scale(1); }
+      50%      { transform: translate(30px, -40px) scale(1.05); }
+    }
+    @keyframes float2 {
+      0%,100% { transform: translate(0,0) scale(1); }
+      50%      { transform: translate(-40px, 30px) scale(1.06); }
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      padding: 28px 56px;
+      display: flex; align-items: center; justify-content: space-between;
+      mix-blend-mode: multiply;
+    }
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 1.6rem;
+      color: var(--slate);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 40px; align-items: center; }
+    .nav-links a {
+      text-decoration: none;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--slate);
+      transition: opacity 0.2s;
+    }
+    .nav-links a:hover { opacity: 0.5; }
+
+    /* ── Sections wrapper ── */
+    .section { position: relative; z-index: 1; }
+
+    /* ── Hero ── */
+    #hero {
+      min-height: 95vh;
+      padding: 120px 56px 80px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 28px;
+      animation: fadeUp 0.8s 0.2s both;
+    }
+    .hero-line { width: 32px; height: 1px; background: var(--pink); }
+    .hero-eyebrow span {
+      font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--pink);
+    }
+    .hero-name {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(4.5rem, 12vw, 10rem);
+      line-height: 0.88;
+      letter-spacing: -0.03em;
+      color: var(--slate);
+      margin-bottom: 40px;
+      animation: fadeUp 0.8s 0.4s both;
+    }
+    .hero-sub {
+      font-size: clamp(1.1rem, 2.2vw, 1.75rem);
+      font-weight: 300;
+      color: var(--slate-mid);
+      max-width: 760px;
+      line-height: 1.5;
+      animation: fadeUp 0.8s 0.6s both;
+    }
+    .hero-sub em {
+      font-style: italic;
+      color: var(--slate);
+      font-weight: 500;
+      text-decoration: underline;
+      text-decoration-color: rgba(232,196,160,0.5);
+      text-underline-offset: 5px;
+    }
+    .scroll-hint {
+      position: absolute; bottom: 48px; left: 56px;
+      display: flex; align-items: center; gap: 12px;
+      font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--slate-lt);
+      animation: fadeUp 1s 1s both;
+    }
+    .scroll-hint svg { animation: bounce 2s ease-in-out infinite; }
+    @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(30px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* ── Ethos ── */
+    #ethos {
+      padding: 120px 56px;
+      max-width: 1280px; margin: 0 auto;
+    }
+    .ethos-grid {
+      display: grid;
+      grid-template-columns: 5fr 7fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .section-eyebrow {
+      font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--pink); margin-bottom: 20px; display: block;
+    }
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      line-height: 1.1;
+      color: var(--slate);
+    }
+    .section-title .accent { color: var(--purple); }
+    .ethos-body { font-size: 1.1rem; color: var(--slate-mid); line-height: 1.8; }
+    .ethos-body p + p { margin-top: 20px; }
+    .ethos-body strong { color: var(--slate); font-weight: 500; }
+    .ethos-quote {
+      border-left: 2px solid rgba(232,196,160,0.4);
+      padding-left: 32px;
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      color: var(--slate-mid);
+      font-size: 1.15rem;
+      line-height: 1.7;
+      margin: 28px 0;
+    }
+    .ethos-pillars {
+      display: flex; flex-wrap: wrap; gap: 28px;
+      margin-top: 40px;
+    }
+    .pillar {
+      display: flex; align-items: center; gap: 14px;
+      color: var(--slate-mid);
+    }
+    .pillar-icon {
+      width: 44px; height: 44px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .pillar-icon svg { width: 20px; height: 20px; }
+    .pillar span {
+      font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase;
+    }
+
+    /* ── Work ── */
+    #work {
+      padding: 120px 56px;
+      max-width: 1280px; margin: 0 auto;
+    }
+    .work-header { margin-bottom: 80px; }
+    .project-item {
+      display: flex; gap: 64px; align-items: flex-start;
+      padding: 64px 0;
+      border-top: 1px solid rgba(42,45,58,0.08);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s, transform 0.7s;
+    }
+    .project-item.visible { opacity: 1; transform: translateY(0); }
+    .project-visual {
+      width: 45%; flex-shrink: 0;
+      border-radius: 24px; overflow: hidden;
+      aspect-ratio: 16/10;
+      position: relative;
+      cursor: pointer;
+    }
+    .project-visual-inner {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.5s;
+    }
+    .project-visual:hover .project-visual-inner { transform: scale(1.04); }
+    .project-title-large {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      color: white; letter-spacing: -0.02em;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    .project-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 60%);
+      display: flex; align-items: flex-end; padding: 28px;
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .project-visual:hover .project-overlay { opacity: 1; }
+    .overlay-label {
+      font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.25em; text-transform: uppercase;
+      color: white; display: flex; align-items: center; gap: 8px;
+    }
+    .overlay-label svg { width: 16px; height: 16px; }
+
+    .project-meta { flex: 1; }
+    .project-meta-header {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 20px;
+    }
+    .project-year {
+      font-family: monospace; font-size: 0.75rem;
+      font-weight: 700; color: var(--pink);
+    }
+    .meta-divider { width: 28px; height: 1px; background: rgba(42,45,58,0.12); }
+    .project-role {
+      font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--slate-lt);
+    }
+    .project-name {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 2.2rem; color: var(--slate);
+      margin-bottom: 16px;
+    }
+    .project-desc { font-size: 1rem; color: var(--slate-mid); line-height: 1.75; margin-bottom: 24px; }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+    .tag {
+      font-size: 0.6rem; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--slate-lt);
+      background: white; border: 1px solid rgba(42,45,58,0.1);
+      padding: 6px 14px; border-radius: 100px;
+    }
+    .project-cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 32px;
+      background: var(--slate); color: white;
+      border-radius: 100px;
+      text-decoration: none;
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      transition: background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(42,45,58,0.12);
+    }
+    .project-cta:hover {
+      background: var(--pink);
+      box-shadow: 0 8px 30px rgba(232,164,176,0.3);
+    }
+    .project-cta svg { width: 14px; height: 14px; transition: transform 0.2s; }
+    .project-cta:hover svg { transform: translate(3px,-3px); }
+
+    .synopsis-card {
+      margin-top: 28px;
+      padding: 28px 32px;
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.7);
+      border-radius: 20px;
+      position: relative; overflow: hidden;
+    }
+    .synopsis-card::before {
+      content: ''; position: absolute; top: 0; right: 0;
+      width: 80px; height: 80px;
+      background: radial-gradient(circle, var(--pink-lt) 0%, transparent 70%);
+    }
+    .synopsis-label {
+      font-size: 0.6rem; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--pink); margin-bottom: 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .synopsis-label::before {
+      content: ''; display: block;
+      width: 16px; height: 3px; border-radius: 2px;
+      background: rgba(232,164,176,0.35);
+    }
+    .synopsis-text {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--slate); line-height: 1.7;
+    }
+
+    /* ── Trajectory ── */
+    #trajectory {
+      background: var(--slate);
+      border-radius: 56px;
+      margin: 0 40px;
+      padding: 100px 80px;
+      position: relative; overflow: hidden;
+      z-index: 1;
+    }
+    .traj-bg-compass {
+      position: absolute; top: 0; right: 0;
+      padding: 64px; opacity: 0.04;
+      animation: spin-slow 80s linear infinite;
+    }
+    @keyframes spin-slow { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+    .traj-grid {
+      display: grid;
+      grid-template-columns: 5fr 7fr;
+      gap: 80px;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .traj-left .section-title { color: white; }
+    .traj-left .section-title .accent { color: var(--peach); }
+    .traj-left p { font-size: 1rem; color: rgba(255,255,255,0.55); line-height: 1.8; margin-top: 20px; }
+    .traj-col-label {
+      font-size: 0.6rem; font-weight: 700;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: rgba(255,255,255,0.35); margin-bottom: 40px; display: block;
+    }
+    .exp-list { display: flex; flex-direction: column; gap: 0; }
+    .exp-item {
+      border-left: 1px solid rgba(255,255,255,0.1);
+      padding: 0 0 40px 32px;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+    .exp-item:hover { border-color: rgba(255,255,255,0.4); }
+    .exp-dot {
+      position: absolute; left: 0; top: 4px;
+      width: 7px; height: 7px;
+      background: var(--peach); border-radius: 50%;
+      transform: translateX(-50%);
+      transition: transform 0.2s;
+    }
+    .exp-item:hover .exp-dot { transform: translateX(-50%) scale(1.6); }
+    .exp-company {
+      font-size: 1.1rem; font-weight: 500; color: rgba(250,247,242,0.9);
+      margin-bottom: 4px;
+    }
+    .exp-position {
+      font-size: 0.6rem; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--pink); margin-bottom: 6px;
+    }
+    .exp-period {
+      font-family: monospace; font-size: 0.7rem;
+      color: rgba(255,255,255,0.25);
+    }
+
+    .edu-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 40px; margin-top: 60px;
+      padding-top: 48px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .edu-item {}
+    .edu-degree {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 1.05rem; color: rgba(250,247,242,0.85);
+      margin-bottom: 6px;
+    }
+    .edu-school {
+      font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+    }
+
+    /* ── Footer / Contact ── */
+    #contact {
+      padding: 160px 56px;
+      text-align: center;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .contact-icon {
+      width: 88px; height: 88px; border-radius: 50%;
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.8);
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.04);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 48px;
+    }
+    .contact-icon svg { width: 32px; height: 32px; color: var(--pink); }
+    .contact-heading {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: var(--slate); margin-bottom: 32px;
+    }
+    .contact-email {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.4rem, 4vw, 3rem);
+      color: var(--slate);
+      text-decoration: none;
+      border-bottom: 2px solid rgba(42,45,58,0.12);
+      padding-bottom: 6px;
+      transition: border-color 0.2s;
+      margin-bottom: 64px;
+    }
+    .contact-email:hover { border-color: var(--pink); }
+    .social-links { display: flex; align-items: center; gap: 40px; margin-bottom: 100px; }
+    .social-links a { color: var(--slate-lt); text-decoration: none; transition: color 0.2s; }
+    .social-links a:hover { color: var(--slate); }
+    .social-links svg { width: 22px; height: 22px; }
+    .location {
+      display: flex; align-items: center; gap: 8px;
+      color: var(--slate-lt);
+    }
+    .location svg { width: 18px; height: 18px; }
+    .location span {
+      font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.3em; text-transform: uppercase;
+    }
+    .footer-copy {
+      font-size: 0.6rem; font-weight: 700;
+      letter-spacing: 0.8em; text-transform: uppercase;
+      color: rgba(42,45,58,0.2);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      nav { padding: 20px 28px; }
+      #hero { padding: 100px 28px 60px; }
+      #ethos, #work { padding: 80px 28px; }
+      .ethos-grid { grid-template-columns: 1fr; gap: 40px; }
+      .project-item { flex-direction: column; gap: 32px; }
+      .project-visual { width: 100%; }
+      #trajectory { margin: 0 16px; padding: 64px 32px; border-radius: 32px; }
+      .traj-grid { grid-template-columns: 1fr; gap: 48px; }
+      .edu-grid { grid-template-columns: 1fr; }
+      #contact { padding: 100px 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating background blobs -->
+  <div class="bg-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <!-- Nav -->
+  <nav>
+    <a href="#hero" class="nav-logo">AO.</a>
+    <div class="nav-links">
+      <a href="#work">Work</a>
+      <a href="#ethos">About</a>
+      <a href="#contact">Contact
+        <svg style="display:inline;vertical-align:middle;margin-left:4px;" width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 9L9 1M9 1H2M9 1V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero" class="section">
+    <div class="hero-eyebrow">
+      <div class="hero-line"></div>
+      <span>Trinidad &amp; Tobago</span>
+    </div>
+    <h1 class="hero-name">Astral Ochoa</h1>
+    <p class="hero-sub">
+      Refining the digital landscape of the Caribbean through <em>Human-Centered Design</em> and systemic innovation.
+    </p>
+    <div class="scroll-hint">
+      <svg width="14" height="20" viewBox="0 0 14 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="1" width="12" height="18" rx="6" stroke="currentColor" stroke-width="1.4"/>
+        <line x1="7" y1="5" x2="7" y2="9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+      Scroll
+    </div>
+  </section>
+
+  <!-- Ethos -->
+  <section id="ethos" class="section">
+    <div class="ethos-grid">
+      <div>
+        <span class="section-eyebrow">My Ethos</span>
+        <h2 class="section-title">
+          Human Needs,<br>
+          <span class="accent">Digital Progress.</span>
+        </h2>
+      </div>
+      <div>
+        <div class="ethos-body">
+          <p>Digital services across the Caribbean are improving, with more opportunities for people to access information, education, and public services online. I'm interested in helping that progress move faster and <strong>work better for the people</strong> using these systems every day.</p>
+          <blockquote class="ethos-quote">
+            "I work with teams to turn research and ideas into clear, practical actions. My role is to help shape services that are easy to understand, simple to use, and built around real user needs."
+          </blockquote>
+          <p>I focus on human-centered design and strong coordination, supporting teams in delivering digital services that improve access, usability, and overall experience.</p>
+        </div>
+        <div class="ethos-pillars">
+          <div class="pillar">
+            <div class="pillar-icon" style="background: rgba(232,164,176,0.12);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#E8A4B0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+            <span>Co-Creation</span>
+          </div>
+          <div class="pillar">
+            <div class="pillar-icon" style="background: rgba(196,176,216,0.15);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#C4B0D8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+              </svg>
+            </div>
+            <span>Actionable Insights</span>
+          </div>
+          <div class="pillar">
+            <div class="pillar-icon" style="background: rgba(232,196,160,0.15);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#E8C4A0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+              </svg>
+            </div>
+            <span>Strategic Empathy</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Work -->
+  <section id="work" class="section">
+    <div class="work-header">
+      <span class="section-eyebrow">Featured Work</span>
+      <h2 class="section-title">Where I've <span class="accent" style="color:var(--purple)">Made an Impact.</span></h2>
+    </div>
+
+    <!-- AgriConnect -->
+    <div class="project-item" data-scroll>
+      <div class="project-visual" onclick="window.open('https://newsday.co.tt/2025/03/27/agriconnect-farm-fresh-online-ready/','_blank')">
+        <div class="project-visual-inner" style="background: linear-gradient(135deg, #2d6a4f 0%, #52b788 50%, #95d5b2 100%);">
+          <span class="project-title-large">AgriConnect</span>
+        </div>
+        <div class="project-overlay">
+          <span class="overlay-label">
+            View Impact
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+          </span>
+        </div>
+      </div>
+      <div class="project-meta">
+        <div class="project-meta-header">
+          <span class="project-year">2024–2025</span>
+          <div class="meta-divider"></div>
+          <span class="project-role">Associate Consultant</span>
+        </div>
+        <h3 class="project-name">AgriConnect</h3>
+        <p class="project-desc">A digital marketplace connecting local farmers directly to wholesale buyers, revolutionizing the agricultural supply chain in Trinidad &amp; Tobago.</p>
+        <div class="project-tags">
+          <span class="tag">Digital Transformation</span>
+          <span class="tag">Agriculture</span>
+          <span class="tag">UX Research</span>
+        </div>
+        <a href="https://newsday.co.tt/2025/03/27/agriconnect-farm-fresh-online-ready/" target="_blank" class="project-cta">
+          View Project Impact
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+        </a>
+        <div class="synopsis-card">
+          <div class="synopsis-label">My Personal Impact</div>
+          <p class="synopsis-text">"I served as a vital link between strategy and technical execution for the AgriConnect platform. My role involved tracking critical milestones, conducting deep-dive user data analysis with smallholder farmers across three Caribbean nations, and producing the documentation that bridged the gap between stakeholders and the development team."</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unqueue -->
+    <div class="project-item" data-scroll>
+      <div class="project-visual" onclick="window.open('https://www.instagram.com/unqueue_app/','_blank')">
+        <div class="project-visual-inner" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);">
+          <span class="project-title-large">Unqueue</span>
+        </div>
+        <div class="project-overlay">
+          <span class="overlay-label">
+            View Impact
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+          </span>
+        </div>
+      </div>
+      <div class="project-meta">
+        <div class="project-meta-header">
+          <span class="project-year">2021–2024</span>
+          <div class="meta-divider"></div>
+          <span class="project-role">Customer Experience &amp; Support</span>
+        </div>
+        <h3 class="project-name">Unqueue</h3>
+        <p class="project-desc">A curb-side pickup and delivery app supporting local entrepreneurs in the Caribbean by digitizing their retail presence.</p>
+        <div class="project-tags">
+          <span class="tag">CX Strategy</span>
+          <span class="tag">Local Commerce</span>
+          <span class="tag">User Support</span>
+        </div>
+        <a href="https://www.instagram.com/unqueue_app/" target="_blank" class="project-cta">
+          View Project Impact
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+        </a>
+        <div class="synopsis-card">
+          <div class="synopsis-label">My Personal Impact</div>
+          <p class="synopsis-text">"Fueling the growth of Caribbean entrepreneurship, I analyzed feedback from over 150 business owners to directly influence platform evolution. I specialized in translating grassroots user needs into technical specifications and developed a robust self-service ecosystem through exhaustive FAQs and outreach initiatives in partnership with NAMDEVCO."</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CourzaTT -->
+    <div class="project-item" data-scroll>
+      <div class="project-visual" onclick="window.open('https://courzatt.com/','_blank')">
+        <div class="project-visual-inner" style="background: linear-gradient(135deg, #f72585 0%, #7209b7 50%, #3a0ca3 100%);">
+          <span class="project-title-large">CourzaTT</span>
+        </div>
+        <div class="project-overlay">
+          <span class="overlay-label">
+            View Impact
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+          </span>
+        </div>
+      </div>
+      <div class="project-meta">
+        <div class="project-meta-header">
+          <span class="project-year">2026</span>
+          <div class="meta-divider"></div>
+          <span class="project-role">Founder &amp; Product Designer</span>
+        </div>
+        <h3 class="project-name">CourzaTT</h3>
+        <p class="project-desc">The only all-in-one platform for discovering educational programmes and institutions across Trinidad &amp; Tobago, built to solve the fragmentation of information in the local learning landscape.</p>
+        <div class="project-tags">
+          <span class="tag">Product Ownership</span>
+          <span class="tag">UX/UI Design</span>
+          <span class="tag">Information Architecture</span>
+        </div>
+        <a href="https://courzatt.com/" target="_blank" class="project-cta">
+          View Project Impact
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+        </a>
+        <div class="synopsis-card">
+          <div class="synopsis-label">My Personal Impact</div>
+          <p class="synopsis-text">"I created CourzaTT as a personal venture to solve a critical information gap in Trinidad &amp; Tobago. Serving as the only all-in-one platform for local courses, it allowed me to apply the full breadth of my Human-Centered Design skills — from initial field research to high-fidelity prototyping — resulting in a service that transforms how people navigate their educational journeys."</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Career Trajectory -->
+  <section id="trajectory" class="section">
+    <div class="traj-bg-compass">
+      <svg width="320" height="320" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="0.5">
+        <circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+      </svg>
+    </div>
+
+    <div class="traj-grid">
+      <div class="traj-left">
+        <span class="traj-col-label">Professional Backbone</span>
+        <h2 class="section-title">My Career<br><span class="accent">Trajectory.</span></h2>
+        <p>As a results-driven professional with deep roots in Trinidad and Tobago, I specialize in translating complex research findings into structured recommendations.</p>
+        <p>My focus is on supporting teams in delivering digital services that prioritize the end-user, ensuring that transformation is not just technological, but fundamentally accessible.</p>
+      </div>
+
+      <div class="traj-right">
+        <span class="traj-col-label">Experience</span>
+        <div class="exp-list">
+
+          <div class="exp-item">
+            <div class="exp-dot"></div>
+            <div class="exp-company">Public Good Studio</div>
+            <div class="exp-position">Associate Consultant</div>
+            <div class="exp-period">07/2024 – 07/2025</div>
+          </div>
+
+          <div class="exp-item">
+            <div class="exp-dot"></div>
+            <div class="exp-company">Unqueue Distributors Ltd</div>
+            <div class="exp-position">Customer Experience Associate</div>
+            <div class="exp-period">11/2021 – 06/2024</div>
+          </div>
+
+          <div class="exp-item">
+            <div class="exp-dot"></div>
+            <div class="exp-company">Office of Disaster Preparedness (ODPM)</div>
+            <div class="exp-position">Community Outreach Assistant</div>
+            <div class="exp-period">10/2017 – 10/2018</div>
+          </div>
+
+          <div class="exp-item">
+            <div class="exp-dot"></div>
+            <div class="exp-company">Market Facts and Opinions (2000) Ltd</div>
+            <div class="exp-position">Research Assistant</div>
+            <div class="exp-period">10/2019 – 05/2020</div>
+          </div>
+
+          <div class="exp-item" style="padding-bottom:0;">
+            <div class="exp-dot"></div>
+            <div class="exp-company">University of Trinidad and Tobago</div>
+            <div class="exp-position">Administration and Research Assistant</div>
+            <div class="exp-period">09/2015 – 09/2016</div>
+          </div>
+
+        </div>
+
+        <div class="edu-grid">
+          <div class="edu-item">
+            <div class="edu-degree">Master of Marketing Management</div>
+            <div class="edu-school">Arthur Lok Jack Global School of Business · 2024</div>
+          </div>
+          <div class="edu-item">
+            <div class="edu-degree">BSc in Behavioural Sciences</div>
+            <div class="edu-school">University of the Southern Caribbean · 2014</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact / Footer -->
+  <footer id="contact" class="section">
+    <div class="contact-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+        <polyline points="22,6 12,13 2,6"/>
+      </svg>
+    </div>
+    <h2 class="contact-heading">Let's build the future together.</h2>
+    <a href="mailto:astral.ochoa@hotmail.com" class="contact-email">astral.ochoa@hotmail.com</a>
+
+    <div class="social-links">
+      <!-- LinkedIn -->
+      <a href="https://www.linkedin.com/company/unqueue-app/" target="_blank" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
+        </svg>
+      </a>
+      <!-- Instagram -->
+      <a href="https://www.instagram.com/unqueue_app/" target="_blank" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+        </svg>
+      </a>
+      <!-- Location -->
+      <div class="location">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+        </svg>
+        <span>T&amp;T</span>
+      </div>
+    </div>
+
+    <p class="footer-copy">© 2026 Astral Ochoa &nbsp;·&nbsp; Digital Transformation</p>
+  </footer>
+
+  <script>
+    // Scroll-triggered fade in for project items
+    const items = document.querySelectorAll('[data-scroll]');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    items.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
